@@ -57,14 +57,16 @@ sub loadSavedLogin()
     section = CreateObject("roRegistrySection", "mplayer")
     m.codeInput.text = section.Read("partner_code")
     m.userInput.text = section.Read("username")
-    m.passInput.text = section.Read("password")
+    m.passInput.text = ""
+    section.Delete("password")
+    section.Flush()
 end sub
 
-sub saveLogin(code as string, user as string, password as string)
+sub saveLogin(code as string, user as string)
     section = CreateObject("roRegistrySection", "mplayer")
     section.Write("partner_code", code)
     section.Write("username", user)
-    section.Write("password", password)
+    section.Delete("password")
     section.Flush()
 end sub
 
@@ -149,7 +151,7 @@ sub handleXtream(task as object)
         showStatus("Nenhum canal ao vivo encontrado.")
         return
     end if
-    saveLogin(UCase(Trim(m.codeInput.text)), m.username, m.password)
+    saveLogin(UCase(Trim(m.codeInput.text)), m.username)
     m.section = "live"
     m.allItems = normalizeItems(data, "live")
     m.streams = m.allItems
