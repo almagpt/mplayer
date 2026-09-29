@@ -82,7 +82,7 @@ object CrashReportStore {
         runCatching {
             latestReportFile(context).writeText(
                 buildReport(context, Thread.currentThread(), throwable)
-                    .replaceFirst("StreamVault Crash Report", "StreamVault Failure Report")
+                    .replaceFirst("Mplayer Crash Report", "Mplayer Failure Report")
                     .plus("\nOperation: ${sanitize(operation)}\n"),
                 Charsets.UTF_8
             )
@@ -104,7 +104,7 @@ object CrashReportStore {
 
     private fun buildReport(context: Context, thread: Thread, throwable: Throwable): String {
         return buildString {
-            appendLine("StreamVault Crash Report")
+            appendLine("Mplayer Crash Report")
             appendLine("========================")
             appendLine("Timestamp: ${OffsetDateTime.now().format(formatter)}")
             appendLine("App Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")

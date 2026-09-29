@@ -548,7 +548,7 @@ class StreamVaultPluginManager @Inject constructor(
     }
 
     suspend fun rewriteCastUrl(url: String): String? =
-        rewriteCastUrl(CastMediaRequest(url = url, title = "StreamVault"))
+        rewriteCastUrl(CastMediaRequest(url = url, title = "Mplayer"))
 
     private fun applyPlaybackPreparationResponse(
         streamInfo: StreamInfo,
@@ -853,7 +853,7 @@ class StreamVaultPluginManager @Inject constructor(
             ?: StreamVaultPluginManifest(
                 id = packageName,
                 name = appLabel.ifBlank { packageName },
-                description = "StreamVault plugin"
+                description = "Mplayer plugin"
             )
         val status = statusResult.await()
         InstalledStreamVaultPlugin(
@@ -885,7 +885,7 @@ class StreamVaultPluginManager @Inject constructor(
             ?: StreamVaultPluginManifest(
                 id = packageName,
                 name = appLabel.ifBlank { packageName },
-                description = "StreamVault plugin"
+                description = "Mplayer plugin"
             )
         return InstalledStreamVaultPlugin(
             packageName = packageName,

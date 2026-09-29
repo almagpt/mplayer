@@ -2,7 +2,7 @@ package com.streamvault.data.remote.jellyfin
 
 import java.security.MessageDigest
 
-private const val JELLYFIN_CLIENT_NAME = "StreamVault"
+private const val JELLYFIN_CLIENT_NAME = "Mplayer"
 private const val JELLYFIN_CLIENT_VERSION = "1.0.0"
 
 internal fun buildJellyfinAuthorizationHeader(

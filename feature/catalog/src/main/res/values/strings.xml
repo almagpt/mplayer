@@ -107,11 +107,11 @@
   <string name="dashboard_top_rated_movies">Top Rated Movies</string>
   <string name="dashboard_update_allow_installs">Allow Installs</string>
   <string name="dashboard_update_available">A newer app release is cached and ready to review from Settings.</string>
-  <string name="dashboard_update_install_permission_required">The update is downloaded. Allow installs from StreamVault, then retry installation.</string>
+  <string name="dashboard_update_install_permission_required">The update is downloaded. Allow installs from Mplayer, then retry installation.</string>
   <string name="dashboard_update_install_ready">The latest update has already been downloaded. Open the installer to finish.</string>
   <string name="dashboard_update_open_installer">Install Update</string>
   <string name="dashboard_update_open_settings">Open Updates</string>
-  <string name="dashboard_update_title">StreamVault %1$s is available</string>
+  <string name="dashboard_update_title">Mplayer %1$s is available</string>
   <string name="dashboard_updated_series">Updated series shelf</string>
   <string name="dashboard_updated_series_badge">Updated series</string>
   <string name="dashboard_warning_review">Open Provider Details</string>

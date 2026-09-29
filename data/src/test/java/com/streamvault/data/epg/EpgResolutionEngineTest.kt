@@ -445,7 +445,7 @@ class EpgResolutionEngineTest {
         whenever(channelDao.getGuideLookupsByIds(listOf(1L, 2L))).thenReturn(
             listOf(
                 makeGuideLookup(id = 1L, epgChannelId = "shared.epg", streamId = 101L),
-                makeGuideLookup(id = 2L, epgChannelId = "shared.epg", streamId = 202L)
+                makeGuideLookup(id = 2L, epgChannelId = "shared.epg", streamId = 2    
             )
         )
         whenever(epgProgrammeDao.getForChannels(SOURCE_1, listOf("external.one", "external.two"), startTime, endTime)).thenReturn(

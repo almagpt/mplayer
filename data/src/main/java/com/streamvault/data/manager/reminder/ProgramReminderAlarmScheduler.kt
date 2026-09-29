@@ -78,6 +78,6 @@ class ProgramReminderAlarmScheduler @Inject constructor(
         .build()
 
     companion object {
-        const val EXACT_ALARM_PERMISSION_MESSAGE = "Exact alarm access is required for reliable program reminders. Enable exact alarms for StreamVault in system settings and try again."
+        const val EXACT_ALARM_PERMISSION_MESSAGE = "Exact alarm access is required for reliable program reminders. Enable exact alarms for Mplayer in system settings and try again."
     }
 }

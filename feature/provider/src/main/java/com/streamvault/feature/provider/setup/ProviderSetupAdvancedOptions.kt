@@ -153,6 +153,7 @@ internal fun AdvancedProviderOptionsSection(
     var showAdvancedOptions by rememberSaveable(sourceType) { mutableStateOf(false) }
     val defaultEpgSyncMode = when (sourceType) {
         SourceType.STALKER -> ProviderEpgSyncMode.BACKGROUND
+        SourceType.PARTNER,
         SourceType.XTREAM,
         SourceType.M3U_URL,
         SourceType.M3U_FILE,

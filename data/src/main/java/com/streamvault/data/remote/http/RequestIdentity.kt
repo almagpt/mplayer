@@ -77,7 +77,7 @@ class DefaultUserAgentInterceptor(
 
 fun buildAppUserAgent(versionName: String?): String {
     val normalizedVersion = versionName?.trim().orEmpty().ifBlank { "dev" }
-    return "StreamVault/$normalizedVersion (Android; Media3; OkHttp)"
+    return "Mplayer/$normalizedVersion (Android; Media3; OkHttp)"
 }
 
 fun buildAppRequestProfile(

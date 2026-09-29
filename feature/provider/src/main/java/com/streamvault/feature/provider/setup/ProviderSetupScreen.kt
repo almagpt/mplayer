@@ -137,6 +137,7 @@ fun ProviderSetupScreen(
     var name by rememberSaveable { mutableStateOf("") }
     var m3uUrl by rememberSaveable { mutableStateOf("") }
     var serverUrl by rememberSaveable { mutableStateOf("") }
+    var partnerCode by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var httpUserAgent by rememberSaveable { mutableStateOf("") }
@@ -230,7 +231,7 @@ fun ProviderSetupScreen(
         val importUri = initialImportUri?.takeIf { it.isNotBlank() } ?: return@LaunchedEffect
         if (handledInitialImportUri == importUri) return@LaunchedEffect
         handledInitialImportUri = importUri
-        selectedTab = 2
+        selectedTab = TAB_M3U
         viewModel.updateM3uTab(1)
         runCatching { android.net.Uri.parse(importUri) }.getOrNull()?.let(::importM3uUri)
     }
@@ -268,7 +269,7 @@ fun ProviderSetupScreen(
             username = uiState.username
             password = uiState.password
             m3uUrl = uiState.m3uUrl
-            val isEditingStalker = uiState.selectedTab == 1
+            val isEditingStalker = uiState.selectedTab == TAB_STALKER
             httpUserAgent = if (isEditingStalker) "" else uiState.httpUserAgent
             httpHeaders = uiState.httpHeaders
             stalkerMacAddress = uiState.stalkerMacAddress
@@ -327,37 +328,41 @@ fun ProviderSetupScreen(
         )
 
     // ?? Derived UI source type ????????????????????????????????????????????????
-    val sourceType = when {
-        selectedTab == 0 -> SourceType.XTREAM
-        selectedTab == 1 -> SourceType.STALKER
-        selectedTab == 3 -> SourceType.JELLYFIN
-        uiState.m3uTab == 1 -> SourceType.M3U_FILE
-        else -> SourceType.M3U_URL
+    val sourceType = when (selectedTab) {
+        TAB_PARTNER -> SourceType.PARTNER
+        TAB_XTREAM -> SourceType.XTREAM
+        TAB_STALKER -> SourceType.STALKER
+        TAB_JELLYFIN -> SourceType.JELLYFIN
+        else -> if (uiState.m3uTab == 1) SourceType.M3U_FILE else SourceType.M3U_URL
     }
 
     fun onSourceTypeSelected(type: SourceType) {
         if (uiState.isEditing) return
         when (type) {
+            SourceType.PARTNER -> {
+                selectedTab = TAB_PARTNER
+                viewModel.applySourceDefaults(ProviderSetupViewModel.SetupSourceType.XTREAM)
+            }
             SourceType.XTREAM  -> {
-                selectedTab = 0
+                selectedTab = TAB_XTREAM
                 viewModel.applySourceDefaults(ProviderSetupViewModel.SetupSourceType.XTREAM)
             }
             SourceType.STALKER -> {
-                selectedTab = 1
+                selectedTab = TAB_STALKER
                 viewModel.applySourceDefaults(ProviderSetupViewModel.SetupSourceType.STALKER)
             }
             SourceType.M3U_URL -> {
-                selectedTab = 2
+                selectedTab = TAB_M3U
                 viewModel.updateM3uTab(0)
                 viewModel.applySourceDefaults(ProviderSetupViewModel.SetupSourceType.M3U)
             }
             SourceType.M3U_FILE-> {
-                selectedTab = 2
+                selectedTab = TAB_M3U
                 viewModel.updateM3uTab(1)
                 viewModel.applySourceDefaults(ProviderSetupViewModel.SetupSourceType.M3U)
             }
             SourceType.JELLYFIN -> {
-                selectedTab = 3
+                selectedTab = TAB_JELLYFIN
                 viewModel.applySourceDefaults(ProviderSetupViewModel.SetupSourceType.JELLYFIN)
             }
         }
@@ -365,6 +370,7 @@ fun ProviderSetupScreen(
 
     val hasUnsavedDraft = !uiState.isEditing && name.isBlank() && (
         serverUrl.isNotBlank() ||
+            partnerCode.isNotBlank() ||
             username.isNotBlank() ||
             password.isNotBlank() ||
             httpUserAgent.isNotBlank() ||
@@ -434,6 +440,9 @@ fun ProviderSetupScreen(
                         serverUrl = serverUrl, onServerUrlChange = { serverUrl = ProviderInputSanitizer.sanitizeUrlForEditing(it) },
                         username = username, onUsernameChange = { username = ProviderInputSanitizer.sanitizeUsernameForEditing(it) },
                         password = password, onPasswordChange = { password = ProviderInputSanitizer.sanitizePasswordForEditing(it) },
+                        partnerCode = partnerCode,
+                        onPartnerCodeChange = { partnerCode = it.uppercase().filter { char -> char.isLetterOrDigit() || char == '-' }.take(32) },
+                        onLoginPartner = { viewModel.loginPartner(partnerCode, username, password, name, httpUserAgent, httpHeaders) },
                         m3uUrl = m3uUrl, onM3uUrlChange = { m3uUrl = ProviderInputSanitizer.sanitizeUrlForEditing(it) },
                         httpUserAgent = httpUserAgent, onHttpUserAgentChange = { httpUserAgent = ProviderInputSanitizer.sanitizeHttpUserAgentForEditing(it) },
                         httpHeaders = httpHeaders, onHttpHeadersChange = { httpHeaders = ProviderInputSanitizer.sanitizeHttpHeadersForEditing(it) },
@@ -499,6 +508,9 @@ fun ProviderSetupScreen(
                         serverUrl = serverUrl, onServerUrlChange = { serverUrl = ProviderInputSanitizer.sanitizeUrlForEditing(it) },
                         username = username, onUsernameChange = { username = ProviderInputSanitizer.sanitizeUsernameForEditing(it) },
                         password = password, onPasswordChange = { password = ProviderInputSanitizer.sanitizePasswordForEditing(it) },
+                        partnerCode = partnerCode,
+                        onPartnerCodeChange = { partnerCode = it.uppercase().filter { char -> char.isLetterOrDigit() || char == '-' }.take(32) },
+                        onLoginPartner = { viewModel.loginPartner(partnerCode, username, password, name, httpUserAgent, httpHeaders) },
                         m3uUrl = m3uUrl, onM3uUrlChange = { m3uUrl = ProviderInputSanitizer.sanitizeUrlForEditing(it) },
                         httpUserAgent = httpUserAgent, onHttpUserAgentChange = { httpUserAgent = ProviderInputSanitizer.sanitizeHttpUserAgentForEditing(it) },
                         httpHeaders = httpHeaders, onHttpHeadersChange = { httpHeaders = ProviderInputSanitizer.sanitizeHttpHeadersForEditing(it) },
@@ -568,7 +580,7 @@ fun ProviderSetupScreen(
             onCancel = when {
                 uiState.jellyfinQuickConnectCode.isNotBlank() ->
                     ({ viewModel.cancelJellyfinQuickConnect() })
-                uiState.selectedTab == 1 && uiState.isLoading ->
+                uiState.selectedTab == TAB_STALKER && uiState.isLoading ->
                     ({ viewModel.cancelStalkerSetup() })
                 else -> null
             }

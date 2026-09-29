@@ -14,7 +14,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "StreamVault"
+rootProject.name = "Mplayer"
 
 include(":app")
 include(":benchmark")
@@ -29,3 +29,4 @@ include(":feature:settings")
 include(":feature:live")
 include(":feature:catalog")
 include(":feature:system")
+

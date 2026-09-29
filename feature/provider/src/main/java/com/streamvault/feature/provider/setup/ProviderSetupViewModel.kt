@@ -41,12 +41,15 @@ import com.streamvault.domain.usecase.ValidateAndAddProviderResult
 import com.streamvault.domain.usecase.XtreamProviderSetupCommand
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class ProviderSetupViewModel @Inject constructor(
@@ -302,10 +305,10 @@ class ProviderSetupViewModel @Inject constructor(
                         hasCustomizedEpgSyncMode = true,
                         m3uVodClassificationEnabled = provider.m3uVodClassificationEnabled,
                         selectedTab = when (provider.type) {
-                            ProviderType.XTREAM_CODES -> 0
-                            ProviderType.STALKER_PORTAL -> 1
-                            ProviderType.M3U -> 2
-                            ProviderType.JELLYFIN -> 3
+                            ProviderType.XTREAM_CODES -> TAB_XTREAM
+                            ProviderType.STALKER_PORTAL -> TAB_STALKER
+                            ProviderType.M3U -> TAB_M3U
+                            ProviderType.JELLYFIN -> TAB_JELLYFIN
                         },
                         m3uTab = if (provider.m3uUrl.startsWith("file://")) 1 else 0
                     )
@@ -570,6 +573,44 @@ class ProviderSetupViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun loginPartner(
+        partnerCode: String,
+        username: String,
+        password: String,
+        name: String,
+        httpUserAgent: String,
+        httpHeaders: String
+    ) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    validationError = null,
+                    error = null,
+                    completionWarning = null,
+                    onboardingCompletion = OnboardingCompletion.NONE,
+                    loginSuccess = false,
+                    isLoading = true,
+                    syncProgress = "Connecting..."
+                )
+            }
+            val dns = try {
+                withContext(Dispatchers.IO) { PartnerAccessClient.resolveDns(partnerCode) }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (failure: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        syncProgress = null,
+                        error = failure.message ?: "Código de parceiro não encontrado"
+                    )
+                }
+                return@launch
+            }
+            loginXtream(dns, username, password, name, httpUserAgent, httpHeaders)
         }
     }
 

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mplayer — Parceiros</title>
+  <style>
+    :root { color-scheme: light; --ink:#14201c; --muted:#5d6b66; --line:#e4ebe8; --bg:#f4f7f6; --card:#fff; --accent:#0f6e56; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); }
+    header { background: #10241d; color: #fff; padding: 22px 20px; }
+    header a { color: #fff; text-decoration: none; }
+    .brand { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+    header h1 { margin: 4px 0 0; font-size: 26px; }
+    main { max-width: 880px; margin: 0 auto; padding: 24px 16px 64px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+    .choices { display: flex; gap: 8px; margin-bottom: 18px; }
+    .choices button, button, .ghost { border: 0; border-radius: 10px; padding: 10px 14px; font: inherit; cursor: pointer; }
+    .choices button { background: #e7eeeb; color: var(--ink); }
+    .choices button.active { background: var(--accent); color: #fff; }
+    button.primary { background: var(--accent); color: #fff; }
+    button.danger { background: #fde8e8; color: #9b1c1c; }
+    label { display: block; font-size: 14px; margin: 12px 0 6px; }
+    input { width: 100%; padding: 12px; border: 1px solid #cfd8d4; border-radius: 10px; font: inherit; }
+    .error { color: #9b1c1c; min-height: 1.2em; }
+    .muted { color: var(--muted); }
+    .row { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 8px; align-items: end; }
+    .partner { border-top: 1px solid var(--line); padding-top: 16px; margin-top: 16px; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    @media (max-width: 720px) { .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand"><a href="/">mplayer</a></div>
+    <h1 id="title">Parceiros</h1>
+  </header>
+  <main>
+    <section class="card" id="login-card">
+      <div class="choices">
+        <button type="button" id="tab-partner" class="active">Parceiros</button>
+        <button type="button" id="tab-admin">Admin</button>
+      </div>
+      <p class="muted" id="login-help">Entre com o login e a senha do parceiro. A opção de parceiros é a inicial.</p>
+      <form id="login-form">
+        <label for="login-user">Login</label>
+        <input id="login-user" name="username" autocomplete="username" required>
+        <label for="login-pass">Senha</label>
+        <input id="login-pass" name="password" type="password" autocomplete="current-password" required>
+        <p class="error" id="login-error"></p>
+        <button class="primary" type="submit">Entrar</button>
+      </form>
+    </section>
+
+    <section class="card" id="partner-card" hidden>
+      <p>Olá, <strong id="partner-name"></strong>. Cadastre o código do provedor e a DNS <span class="muted">http://</span> usada para conectar no Xtream. Quem configura isso é o parceiro.</p>
+      <form id="access-form">
+        <label for="code">Código do provedor</label>
+        <input id="code" required placeholder="EXEMPLO01">
+        <label for="dns">DNS</label>
+        <input id="dns" required placeholder="http://servidor.com:80">
+        <p class="error" id="access-error"></p>
+        <div class="actions">
+          <button class="primary" type="submit">Salvar código e DNS</button>
+          <button class="ghost" type="button" id="logout">Sair</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card" id="admin-card" hidden>
+      <p>Admin com acesso total. Crie parceiros e, se precisar, ajuste o código e a DNS de cada um.</p>
+      <form id="create-form">
+        <label for="new-user">Login do parceiro</label>
+        <input id="new-user" required placeholder="parceiro1">
+        <label for="new-pass">Senha</label>
+        <input id="new-pass" type="password" required minlength="6">
+        <p class="error" id="create-error"></p>
+        <button class="primary" type="submit">Criar parceiro</button>
+      </form>
+      <div id="partner-list"></div>
+      <div class="actions">
+        <button class="ghost" type="button" id="admin-logout">Sair</button>
+      </div>
+    </section>
+  </main>
+  <script>
+    const loginCard = document.querySelector("#login-card");
+    const partnerCard = document.querySelector("#partner-card");
+    const adminCard = document.querySelector("#admin-card");
+    const tabPartner = document.querySelector("#tab-partner");
+    const tabAdmin = document.querySelector("#tab-admin");
+    let mode = location.pathname.startsWith("/admin") ? "admin" : "partner";
+
+    function setMode(next) {
+      mode = next;
+      tabPartner.classList.toggle("active", mode === "partner");
+      tabAdmin.classList.toggle("active", mode === "admin");
+      document.querySelector("#title").textContent = mode === "admin" ? "Admin" : "Parceiros";
+      document.querySelector("#login-help").textContent = mode === "admin"
+        ? "Entre com o login e a senha do admin para criar e gerenciar parceiros."
+        : "Entre com o login e a senha do parceiro. A opção de parceiros é a inicial.";
+    }
+
+    tabPartner.onclick = () => setMode("partner");
+    tabAdmin.onclick = () => setMode("admin");
+    setMode(mode);
+
+    async function api(path, options = {}) {
+      const response = await fetch(path, {
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+        ...options
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.detail || "não foi possível concluir");
+      return data;
+    }
+
+    async function logout() {
+      await api("/auth/logout", { method: "POST" });
+      location.href = "/partner";
+    }
+
+    document.querySelector("#logout").onclick = logout;
+    document.querySelector("#admin-logout").onclick = logout;
+
+    document.querySelector("#login-form").onsubmit = async (event) => {
+      event.preventDefault();
+      const error = document.querySelector("#login-error");
+      error.textContent = "";
+      try {
+        const data = await api("/auth/login", {
+          method: "POST",
+          body: JSON.stringify({
+            username: document.querySelector("#login-user").value,
+            password: document.querySelector("#login-pass").value
+          })
+        });
+        if (mode === "admin" && data.role !== "admin") throw new Error("esta conta não é admin");
+        if (mode === "partner" && data.role !== "partner") throw new Error("use a opção Admin para esta conta");
+        location.href = data.role === "admin" ? "/admin" : "/partner";
+      } catch (err) {
+        error.textContent = err.message;
+      }
+    };
+
+    async function loadPartner() {
+      const data = await api("/partner/access");
+      document.querySelector("#partner-name").textContent = data.username;
+      document.querySelector("#code").value = data.provider_code || "";
+      document.querySelector("#dns").value = data.dns_url || "";
+      loginCard.hidden = true;
+      partnerCard.hidden = false;
+      adminCard.hidden = true;
+    }
+
+    document.querySelector("#access-form").onsubmit = async (event) => {
+      event.preventDefault();
+      const error = document.querySelector("#access-error");
+      error.textContent = "";
+      try {
+        await api("/partner/access", {
+          method: "PUT",
+          body: JSON.stringify({
+            provider_code: document.querySelector("#code").value,
+            dns_url: document.querySelector("#dns").value
+          })
+        });
+        error.textContent = "Código e DNS salvos.";
+        error.style.color = "#0f6e56";
+      } catch (err) {
+        error.style.color = "#9b1c1c";
+        error.textContent = err.message;
+      }
+    };
+
+    function partnerBlock(partner) {
+      const block = document.createElement("div");
+      block.className = "partner";
+      block.innerHTML = `
+        <strong></strong>
+        <div class="row">
+          <input class="code" placeholder="Código">
+          <input class="dns" placeholder="http://">
+          <button class="primary save" type="button">Salvar</button>
+        </div>
+        <div class="actions">
+          <input class="pass" type="password" placeholder="Nova senha" minlength="6">
+          <button class="ghost reset" type="button">Trocar senha</button>
+          <button class="danger remove" type="button">Excluir</button>
+        </div>
+        <p class="error"></p>`;
+      block.querySelector("strong").textContent = partner.username;
+      block.querySelector(".code").value = partner.provider_code || "";
+      block.querySelector(".dns").value = partner.dns_url || "";
+      const message = block.querySelector(".error");
+      block.querySelector(".save").onclick = async () => {
+        message.style.color = "#9b1c1c";
+        try {
+          await api("/admin/partners/" + partner.id, {
+            method: "PUT",
+            body: JSON.stringify({
+              provider_code: block.querySelector(".code").value,
+              dns_url: block.querySelector(".dns").value
+            })
+          });
+          message.style.color = "#0f6e56";
+          message.textContent = "Salvo.";
+        } catch (err) { message.textContent = err.message; }
+      };
+      block.querySelector(".reset").onclick = async () => {
+        message.style.color = "#9b1c1c";
+        try {
+          await api("/admin/partners/" + partner.id + "/password", {
+            method: "PUT",
+            body: JSON.stringify({ password: block.querySelector(".pass").value })
+          });
+          block.querySelector(".pass").value = "";
+          message.style.color = "#0f6e56";
+          message.textContent = "Senha atualizada.";
+        } catch (err) { message.textContent = err.message; }
+      };
+      block.querySelector(".remove").onclick = async () => {
+        if (!confirm("Excluir o parceiro " + partner.username + "?")) return;
+        await api("/admin/partners/" + partner.id, { method: "DELETE" });
+        loadAdmin();
+      };
+      return block;
+    }
+
+    async function loadAdmin() {
+      const data = await api("/admin/partners");
+      const list = document.querySelector("#partner-list");
+      list.replaceChildren();
+      data.partners.forEach((partner) => list.appendChild(partnerBlock(partner)));
+      loginCard.hidden = true;
+      partnerCard.hidden = true;
+      adminCard.hidden = false;
+      document.querySelector("#title").textContent = "Admin";
+    }
+
+    document.querySelector("#create-form").onsubmit = async (event) => {
+      event.preventDefault();
+      const error = document.querySelector("#create-error");
+      error.textContent = "";
+      try {
+        await api("/admin/partners", {
+          method: "POST",
+          body: JSON.stringify({
+            username: document.querySelector("#new-user").value,
+            password: document.querySelector("#new-pass").value
+          })
+        });
+        document.querySelector("#create-form").reset();
+        loadAdmin();
+      } catch (err) { error.textContent = err.message; }
+    };
+
+    api("/auth/session").then((session) => {
+      if (!session.authenticated) return;
+      if (session.role === "admin") loadAdmin();
+      if (session.role === "partner") loadPartner();
+    }).catch(() => {});
+  </script>
+</body>
+</html>

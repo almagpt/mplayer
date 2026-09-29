@@ -229,6 +229,7 @@ internal fun EpgSyncModeOptionRow(
 }
 
 internal fun supportsGuideAndLogoPolicy(sourceType: SourceType): Boolean = when (sourceType) {
+    SourceType.PARTNER,
     SourceType.XTREAM,
     SourceType.STALKER,
     SourceType.M3U_URL,

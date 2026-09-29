@@ -6,8 +6,8 @@
     <string name="settings_syncing_btn">Syncing...</string>
     <string name="settings_backup_restore">Backup &amp; Restore</string>
     <string name="settings_restore_data">Import Data</string>
-    <string name="settings_restore_subtitle">Choose a backup file, or open a backup with StreamVault from a file manager.</string>
-    <string name="setup_title_streamvault">StreamVault</string>
+    <string name="settings_restore_subtitle">Choose a backup file, or open a backup with Mplayer from a file manager.</string>
+    <string name="setup_title_streamvault">Mplayer</string>
     <string name="setup_provider_title">Add a provider</string>
     <string name="setup_edit_provider">Edit Provider</string>
     <string name="setup_update_desc">Update your IPTV provider details</string>
@@ -25,6 +25,10 @@
     <string name="setup_info_manage_body">Refresh, edit, or replace it later from Settings.</string>
     <string name="setup_import_backup">Import Backup</string>
     <string name="badge_beta">Beta</string>
+    <string name="setup_partner">Partners</string>
+    <string name="setup_partner_code_hint">Partner code</string>
+    <string name="setup_info_partner_body">Enter the partner code, then your Xtream user and password. The partner configures the DNS.</string>
+    <string name="setup_partner_railway_hint">DNS is loaded from mplayer.up.railway.app</string>
     <string name="setup_xtream">Xtream Codes</string>
     <string name="setup_stalker">Stalker</string>
     <string name="setup_m3u">M3U Playlist</string>

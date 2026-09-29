@@ -53,6 +53,15 @@ internal fun SourceTypeSelectorPanel(
                 style = MaterialTheme.typography.labelSmall,
                 color = TextTertiary
             )
+            if (!isEditing || sourceType == SourceType.PARTNER) {
+                SourceTypeCard(
+                    title = androidx.compose.ui.res.stringResource(R.string.setup_partner),
+                    subtitle = androidx.compose.ui.res.stringResource(R.string.setup_info_partner_body),
+                    selected = sourceType == SourceType.PARTNER,
+                    enabled = !isEditing,
+                    onClick = { onSelect(SourceType.PARTNER) }
+                )
+            }
             if (!isEditing || sourceType == SourceType.XTREAM) {
                 SourceTypeCard(
                     title = androidx.compose.ui.res.stringResource(R.string.setup_xtream),

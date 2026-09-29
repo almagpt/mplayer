@@ -30,7 +30,13 @@ import com.streamvault.core.ui.theme.Surface as SurfaceColor
 import com.streamvault.core.ui.theme.SurfaceHighlight
 import com.streamvault.core.ui.theme.TextPrimary
 
-internal enum class SourceType { XTREAM, STALKER, M3U_URL, M3U_FILE, JELLYFIN }
+internal enum class SourceType { PARTNER, XTREAM, STALKER, M3U_URL, M3U_FILE, JELLYFIN }
+
+internal const val TAB_PARTNER = 0
+internal const val TAB_XTREAM = 1
+internal const val TAB_STALKER = 2
+internal const val TAB_M3U = 3
+internal const val TAB_JELLYFIN = 4
 
 @Composable
 internal fun SourceTypeTabRow(
@@ -40,6 +46,13 @@ internal fun SourceTypeTabRow(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        if (!isEditing || sourceType == SourceType.PARTNER) {
+            TabButton(
+                text = androidx.compose.ui.res.stringResource(R.string.setup_partner),
+                isSelected = sourceType == SourceType.PARTNER,
+                onClick = { if (!isEditing) onSelect(SourceType.PARTNER) }
+            )
+        }
         if (!isEditing || sourceType == SourceType.XTREAM) {
             TabButton(
                 text = androidx.compose.ui.res.stringResource(R.string.setup_xtream),

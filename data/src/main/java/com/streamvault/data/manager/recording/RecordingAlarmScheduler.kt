@@ -109,6 +109,6 @@ class RecordingAlarmScheduler @Inject constructor(
     }
 
     companion object {
-        const val EXACT_ALARM_PERMISSION_MESSAGE = "Exact alarm access is required for reliable DVR scheduling. Enable exact alarms for StreamVault in system settings and try again."
+        const val EXACT_ALARM_PERMISSION_MESSAGE = "Exact alarm access is required for reliable DVR scheduling. Enable exact alarms for Mplayer in system settings and try again."
     }
 }

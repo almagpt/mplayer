@@ -11,7 +11,72 @@ import androidx.tv.material3.MaterialTheme
 import com.streamvault.feature.provider.R
 import com.streamvault.feature.provider.pairing.ProviderQrPairingState
 import com.streamvault.core.ui.theme.ErrorColor
+import com.streamvault.core.ui.theme.OnSurfaceDim
 import com.streamvault.domain.model.StalkerAuthMode
+
+@Composable
+internal fun PartnerProviderForm(
+    uiState: ProviderSetupState,
+    isTelevisionDevice: Boolean,
+    partnerCode: String,
+    onPartnerCodeChange: (String) -> Unit,
+    username: String,
+    onUsernameChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    options: ProviderAdvancedOptions,
+    onLogin: () -> Unit
+) {
+    ProviderTextField(
+        value = partnerCode,
+        onValueChange = onPartnerCodeChange,
+        placeholder = stringResource(R.string.setup_partner_code_hint),
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Characters,
+            autoCorrectEnabled = false,
+            keyboardType = KeyboardType.Ascii,
+            imeAction = ImeAction.Next
+        )
+    )
+    Text(
+        text = stringResource(R.string.setup_partner_railway_hint),
+        style = MaterialTheme.typography.bodySmall,
+        color = OnSurfaceDim
+    )
+    ProviderTextField(
+        value = username,
+        onValueChange = onUsernameChange,
+        placeholder = stringResource(R.string.setup_user_hint),
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.None,
+            autoCorrectEnabled = false,
+            keyboardType = KeyboardType.Ascii,
+            imeAction = ImeAction.Next
+        )
+    )
+    ProviderTextField(
+        value = password,
+        onValueChange = onPasswordChange,
+        placeholder = stringResource(R.string.setup_pass_hint),
+        isPassword = true,
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.None,
+            autoCorrectEnabled = false,
+            keyboardType = if (isTelevisionDevice) KeyboardType.Ascii else KeyboardType.Password,
+            imeAction = ImeAction.Done
+        )
+    )
+    AdvancedProviderOptionsSection(options)
+    FormErrors(uiState.validationError, uiState.error)
+    ActionButton(
+        text = when {
+            uiState.isLoading -> stringResource(R.string.setup_connecting)
+            else -> stringResource(R.string.setup_login)
+        },
+        isLoading = uiState.isLoading,
+        onClick = onLogin
+    )
+}
 
 @Composable
 internal fun XtreamProviderForm(

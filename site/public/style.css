@@ -1,0 +1,97 @@
+:root {
+  color-scheme: light;
+  --ink: #1a1d23;
+  --muted: #5c6570;
+  --line: #e6e8ec;
+  --bg: #f6f7f9;
+  --card: #ffffff;
+  --accent: #0f6e6b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+header {
+  background: #111827;
+  color: #fff;
+  padding: 28px 20px;
+}
+
+header a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.brand {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+header h1 {
+  margin: 6px 0 0;
+  font-size: 28px;
+  font-weight: 650;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+}
+
+article, .card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 28px 24px;
+}
+
+p, li { color: var(--ink); }
+
+.meta {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 28px 0 8px;
+}
+
+ul { padding-left: 20px; }
+
+a { color: var(--accent); }
+
+nav {
+  display: flex;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+nav a {
+  color: #d1d5db;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+nav a[aria-current="page"] {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.links a {
+  display: block;
+  margin: 10px 0;
+  font-size: 18px;
+}

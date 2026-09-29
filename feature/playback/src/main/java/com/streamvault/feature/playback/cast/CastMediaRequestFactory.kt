@@ -81,7 +81,7 @@ class CastMediaRequestFactory @Inject constructor() {
         const val MIME_SMOOTH_STREAMING = "application/vnd.ms-sstr+xml"
         const val MIME_MPEG_TS = "video/mp2t"
         const val MIME_VIDEO = "video/*"
-        private const val DEFAULT_TITLE = "StreamVault"
+        private const val DEFAULT_TITLE = "Mplayer"
     }
 }
 

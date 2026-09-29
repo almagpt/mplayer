@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">StreamVault</string>
+  <string name="app_name">Mplayer</string>
   <string name="welcome_setup_provider">Szolgáltató beállítása</string>
   <string name="welcome_loading_title">Könyvtár előkészítése</string>
   <string name="sync_section_live">Live</string>

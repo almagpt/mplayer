@@ -89,6 +89,9 @@ internal fun ProviderFormContent(
     onRemoveStalkerRequestRule: (Int) -> Unit,
     fileImportError: String?,
     onFilePick: () -> Unit,
+    partnerCode: String,
+    onPartnerCodeChange: (String) -> Unit,
+    onLoginPartner: () -> Unit,
     onLoginXtream: () -> Unit,
     onLoginStalker: () -> Unit,
     onRepairStalker: () -> Unit,
@@ -188,7 +191,7 @@ internal fun ProviderFormContent(
                 onValueChange = onNameChange,
                 placeholder = stringResource(R.string.setup_name_hint)
             )
-            if (!uiState.isEditing) {
+            if (!uiState.isEditing && sourceType != SourceType.PARTNER) {
                 PhonePairingCard(
                     pairingState = pairingState,
                     onStart = onStartPhonePairing,
@@ -198,6 +201,18 @@ internal fun ProviderFormContent(
             HorizontalDivider(color = SurfaceHighlight.copy(alpha = 0.6f))
 
             when (sourceType) {
+                SourceType.PARTNER -> PartnerProviderForm(
+                    uiState = uiState,
+                    isTelevisionDevice = isTelevisionDevice,
+                    partnerCode = partnerCode,
+                    onPartnerCodeChange = onPartnerCodeChange,
+                    username = username,
+                    onUsernameChange = onUsernameChange,
+                    password = password,
+                    onPasswordChange = onPasswordChange,
+                    options = advancedOptions,
+                    onLogin = onLoginPartner
+                )
                 SourceType.XTREAM -> XtreamProviderForm(
                     uiState = uiState,
                     isTelevisionDevice = isTelevisionDevice,
