@@ -1,4 +1,7 @@
 sub init()
+    m.welcomeGroup = m.top.findNode("welcomeGroup")
+    m.setupButton = m.top.findNode("setupButton")
+    m.laterButton = m.top.findNode("laterButton")
     m.loginGroup = m.top.findNode("loginGroup")
     m.homeGroup = m.top.findNode("homeGroup")
     m.video = m.top.findNode("video")
@@ -48,11 +51,28 @@ sub init()
     m.favoriteButton.observeField("buttonSelected", "onFavoritesPressed")
     m.searchSubmitButton.observeField("buttonSelected", "onSearchSubmit")
     m.searchCancelButton.observeField("buttonSelected", "closeSearch")
+    m.setupButton.observeField("buttonSelected", "onSetupPressed")
+    m.laterButton.observeField("buttonSelected", "onLaterPressed")
     m.video.observeField("state", "onVideoState")
 
     loadFavorites()
-    m.codeInput.setFocus(true)
     loadSavedLogin()
+    m.setupButton.setFocus(true)
+end sub
+
+sub onSetupPressed()
+    m.welcomeGroup.visible = false
+    m.loginGroup.visible = true
+    m.codeInput.setFocus(true)
+end sub
+
+sub onLaterPressed()
+    m.welcomeGroup.visible = false
+    m.loginGroup.visible = false
+    m.homeGroup.visible = true
+    m.sectionTitle.text = "Adicione um provedor"
+    m.contentStatus.text = "Abra Sair e configure seu acesso de parceiro."
+    m.liveButton.setFocus(true)
 end sub
 
 sub loadSavedLogin()
@@ -567,6 +587,11 @@ function onKeyEvent(key as string, press as boolean) as boolean
             return true
         else if m.homeGroup.visible
             m.liveButton.setFocus(true)
+            return true
+        else if m.loginGroup.visible
+            m.loginGroup.visible = false
+            m.welcomeGroup.visible = true
+            m.setupButton.setFocus(true)
             return true
         end if
     else if key = "options"

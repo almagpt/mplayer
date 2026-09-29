@@ -2,48 +2,97 @@
 <component name="MainScene" extends="Scene">
     <script type="text/brightscript" uri="pkg:/components/MainScene.brs" />
     <children>
-        <Rectangle id="bg" width="1920" height="1080" color="0x0B1220FF" />
+        <Poster id="bg" width="1920" height="1080" uri="pkg:/images/app_bg.png" />
 
-        <Group id="loginGroup">
+        <Group id="welcomeGroup">
+            <Poster uri="pkg:/images/welcome_card.png" translation="[230,275]" width="1460" height="500" />
             <Label
-                id="brand"
                 text="Mplayer"
-                translation="[120,80]"
+                translation="[810,320]"
+                font="font:SmallBoldSystemFont"
+                color="0x60A5FAFF" />
+            <Label
+                text="IPTV premium para sua sala"
+                translation="[350,400]"
+                width="1220"
+                horizAlign="center"
                 font="font:LargeBoldSystemFont"
                 color="0xFFFFFFFF" />
             <Label
-                id="subtitle"
-                text="Entre com o código do parceiro e as credenciais Xtream"
-                translation="[120,160]"
-                width="1680"
+                text="TV ao vivo, filmes e séries com uma experiência feita para o controle remoto."
+                translation="[400,500]"
+                width="1120"
+                wrap="true"
+                horizAlign="center"
+                color="0x94A3B8FF" />
+            <Button id="setupButton" text="Configurar provedor" translation="[370,625]" minWidth="570" />
+            <Button id="laterButton" text="Configurar depois" translation="[980,625]" minWidth="570" />
+        </Group>
+
+        <Group id="loginGroup" visible="false">
+            <Poster uri="pkg:/images/sidebar_card.png" translation="[45,110]" width="350" height="850" />
+            <Poster uri="pkg:/images/form_card.png" translation="[430,110]" width="1440" height="850" />
+            <Poster uri="pkg:/images/selected_source.png" translation="[75,285]" width="290" height="145" />
+            <Label
+                id="brand"
+                text="Mplayer"
+                translation="[65,35]"
+                font="font:LargeBoldSystemFont"
+                color="0xFFFFFFFF" />
+            <Label
+                text="Adicionar provedor"
+                translation="[75,145]"
+                font="font:MediumBoldSystemFont"
+                color="0xFFFFFFFF" />
+            <Label
+                text="Comece por Parceiros."
+                translation="[75,195]"
+                width="280"
                 wrap="true"
                 color="0x94A3B8FF" />
-            <Label id="codeLabel" text="Código do parceiro" translation="[120,280]" color="0x60A5FAFF" />
-            <Button id="codeInput" text="Digite o código" translation="[120,320]" minWidth="900" />
-            <Label id="userLabel" text="Usuário Xtream" translation="[120,430]" color="0x60A5FAFF" />
-            <Button id="userInput" text="Digite o usuário" translation="[120,470]" minWidth="900" />
-            <Label id="passLabel" text="Senha Xtream" translation="[120,580]" color="0x60A5FAFF" />
-            <Button id="passInput" text="Digite a senha" translation="[120,620]" minWidth="900" />
-            <Button id="loginButton" text="Entrar" translation="[120,760]" minWidth="280" />
+            <Label text="Parceiros" translation="[100,315]" font="font:MediumBoldSystemFont" color="0xFFFFFFFF" />
+            <Label text="Código + acesso Xtream" translation="[100,365]" width="230" color="0x94A3B8FF" />
+            <Label text="Xtream Codes" translation="[100,480]" color="0x94A3B8FF" />
+            <Label text="M3U Playlist" translation="[100,550]" color="0x94A3B8FF" />
+            <Label text="Stalker / MAG" translation="[100,620]" color="0x64748BFF" />
+            <Label text="Jellyfin" translation="[100,690]" color="0x64748BFF" />
+
+            <Label
+                id="subtitle"
+                text="Acesse pelo parceiro"
+                translation="[500,155]"
+                font="font:MediumBoldSystemFont"
+                color="0xFFFFFFFF" />
+            <Label text="A DNS é configurada no portal Railway e carregada automaticamente." translation="[500,205]" width="1200" color="0x94A3B8FF" />
+            <Label id="codeLabel" text="Código do parceiro" translation="[500,300]" color="0x60A5FAFF" />
+            <Button id="codeInput" text="Digite o código" translation="[500,340]" minWidth="1120" />
+            <Label id="userLabel" text="Usuário Xtream" translation="[500,465]" color="0x60A5FAFF" />
+            <Button id="userInput" text="Digite o usuário" translation="[500,505]" minWidth="1120" />
+            <Label id="passLabel" text="Senha Xtream" translation="[500,630]" color="0x60A5FAFF" />
+            <Button id="passInput" text="Digite a senha" translation="[500,670]" minWidth="1120" />
+            <Button id="loginButton" text="Entrar" translation="[500,810]" minWidth="360" />
             <Label
                 id="statusLabel"
                 text="A DNS vem de mplayer.up.railway.app"
-                translation="[120,860]"
-                width="1680"
+                translation="[900,835]"
+                width="750"
                 wrap="true"
                 color="0x94A3B8FF" />
         </Group>
 
         <Group id="homeGroup" visible="false">
-            <Label id="homeTitle" text="Mplayer" translation="[70,32]" font="font:LargeBoldSystemFont" color="0xFFFFFFFF" />
+            <Poster uri="pkg:/images/top_bar.png" translation="[30,20]" width="1860" height="95" />
+            <Poster uri="pkg:/images/category_card.png" translation="[45,190]" width="410" height="800" />
+            <Poster uri="pkg:/images/content_card.png" translation="[485,190]" width="1390" height="800" />
+            <Label id="homeTitle" text="Mplayer" translation="[70,47]" font="font:MediumBoldSystemFont" color="0xFFFFFFFF" />
             <Button id="liveButton" text="TV ao vivo" translation="[300,25]" minWidth="220" />
             <Button id="movieButton" text="Filmes" translation="[535,25]" minWidth="180" />
             <Button id="seriesButton" text="Séries" translation="[730,25]" minWidth="180" />
             <Button id="searchButton" text="Buscar" translation="[925,25]" minWidth="180" />
             <Button id="favoriteButton" text="Favoritos" translation="[1120,25]" minWidth="200" />
             <Button id="logoutButton" text="Sair" translation="[1640,25]" minWidth="180" />
-            <Label id="sectionTitle" text="TV ao vivo" translation="[70,112]" font="font:MediumBoldSystemFont" color="0x60A5FAFF" />
-            <Label id="contentStatus" text="" translation="[70,158]" width="1780" color="0x94A3B8FF" />
+            <Label id="sectionTitle" text="TV ao vivo" translation="[70,135]" font="font:MediumBoldSystemFont" color="0x60A5FAFF" />
+            <Label id="contentStatus" text="" translation="[500,145]" width="1280" color="0x94A3B8FF" />
             <LabelList
                 id="categoryList"
                 translation="[70,215]"
