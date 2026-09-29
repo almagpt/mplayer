@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="MainScene" extends="Scene">
+    <script type="text/brightscript" uri="pkg:/components/MainScene.brs" />
+    <children>
+        <Rectangle id="bg" width="1920" height="1080" color="0x0B1220FF" />
+
+        <Group id="loginGroup">
+            <Label
+                id="brand"
+                text="Mplayer"
+                translation="[120,80]"
+                font="font:LargeBoldSystemFont"
+                color="0xFFFFFFFF" />
+            <Label
+                id="subtitle"
+                text="Entre com o código do parceiro e as credenciais Xtream"
+                translation="[120,160]"
+                width="1680"
+                wrap="true"
+                color="0x94A3B8FF" />
+            <Label id="codeLabel" text="Código do parceiro" translation="[120,280]" color="0x60A5FAFF" />
+            <TextEditBox id="codeInput" translation="[120,320]" width="900" hintText="ABC123" />
+            <Label id="userLabel" text="Usuário Xtream" translation="[120,430]" color="0x60A5FAFF" />
+            <TextEditBox id="userInput" translation="[120,470]" width="900" hintText="usuario" />
+            <Label id="passLabel" text="Senha Xtream" translation="[120,580]" color="0x60A5FAFF" />
+            <TextEditBox id="passInput" translation="[120,620]" width="900" hintText="senha" secureMode="true" />
+            <Button id="loginButton" text="Entrar" translation="[120,760]" minWidth="280" />
+            <Label
+                id="statusLabel"
+                text="A DNS vem de mplayer.up.railway.app"
+                translation="[120,860]"
+                width="1680"
+                wrap="true"
+                color="0x94A3B8FF" />
+        </Group>
+
+        <Group id="homeGroup" visible="false">
+            <Label id="homeTitle" text="Mplayer" translation="[70,32]" font="font:LargeBoldSystemFont" color="0xFFFFFFFF" />
+            <Button id="liveButton" text="TV ao vivo" translation="[300,25]" minWidth="220" />
+            <Button id="movieButton" text="Filmes" translation="[535,25]" minWidth="180" />
+            <Button id="seriesButton" text="Séries" translation="[730,25]" minWidth="180" />
+            <Button id="searchButton" text="Buscar" translation="[925,25]" minWidth="180" />
+            <Button id="favoriteButton" text="Favoritos" translation="[1120,25]" minWidth="200" />
+            <Button id="logoutButton" text="Sair" translation="[1640,25]" minWidth="180" />
+            <Label id="sectionTitle" text="TV ao vivo" translation="[70,112]" font="font:MediumBoldSystemFont" color="0x60A5FAFF" />
+            <Label id="contentStatus" text="" translation="[70,158]" width="1780" color="0x94A3B8FF" />
+            <LabelList
+                id="categoryList"
+                translation="[70,215]"
+                itemSize="[390,58]"
+                numRows="12"
+                font="font:SmallSystemFont"
+                focusedFont="font:SmallBoldSystemFont"
+                color="0xCBD5E1FF"
+                focusedColor="0xFFFFFFFF" />
+            <LabelList
+                id="contentList"
+                translation="[500,215]"
+                itemSize="[1320,58]"
+                numRows="12"
+                font="font:MediumSystemFont"
+                focusedFont="font:MediumBoldSystemFont"
+                color="0xE2E8F0FF"
+                focusedColor="0xFFFFFFFF" />
+            <Label
+                id="helpLabel"
+                text="OK: abrir  •  *: favoritar  •  Voltar: menu"
+                translation="[500,980]"
+                width="1300"
+                color="0x64748BFF" />
+        </Group>
+
+        <Group id="searchGroup" visible="false">
+            <Rectangle width="1920" height="1080" color="0x0B1220F5" />
+            <Label text="Buscar" translation="[180,180]" font="font:LargeBoldSystemFont" color="0xFFFFFFFF" />
+            <TextEditBox id="searchInput" translation="[180,280]" width="1200" hintText="Canal, filme ou série" />
+            <Button id="searchSubmitButton" text="Pesquisar" translation="[180,410]" minWidth="300" />
+            <Button id="searchCancelButton" text="Cancelar" translation="[500,410]" minWidth="300" />
+            <Label id="searchStatus" text="" translation="[180,530]" width="1500" wrap="true" color="0x94A3B8FF" />
+        </Group>
+
+        <Video
+            id="video"
+            visible="false"
+            translation="[0,0]"
+            width="1920"
+            height="1080"
+            enableUI="true" />
+    </children>
+</component>

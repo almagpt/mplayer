@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="HttpTask" extends="Task">
+    <interface>
+        <field id="requestUrl" type="string" />
+        <field id="statusCode" type="integer" />
+        <field id="body" type="string" />
+        <field id="errorMessage" type="string" />
+        <field id="done" type="boolean" />
+    </interface>
+    <script type="text/brightscript" uri="pkg:/components/tasks/HttpTask.brs" />
+</component>

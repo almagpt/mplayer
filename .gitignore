@@ -85,3 +85,8 @@ gradle_*_rerun.log
 
 # Local debug artifacts
 app-debug.apk
+
+.roku-dev.key
+
+mplayer.pkg
+*.pkg
