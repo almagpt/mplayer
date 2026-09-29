@@ -19,11 +19,11 @@
                 wrap="true"
                 color="0x94A3B8FF" />
             <Label id="codeLabel" text="Código do parceiro" translation="[120,280]" color="0x60A5FAFF" />
-            <TextEditBox id="codeInput" translation="[120,320]" width="900" hintText="ABC123" />
+            <Button id="codeInput" text="Digite o código" translation="[120,320]" minWidth="900" />
             <Label id="userLabel" text="Usuário Xtream" translation="[120,430]" color="0x60A5FAFF" />
-            <TextEditBox id="userInput" translation="[120,470]" width="900" hintText="usuario" />
+            <Button id="userInput" text="Digite o usuário" translation="[120,470]" minWidth="900" />
             <Label id="passLabel" text="Senha Xtream" translation="[120,580]" color="0x60A5FAFF" />
-            <TextEditBox id="passInput" translation="[120,620]" width="900" hintText="senha" secureMode="true" />
+            <Button id="passInput" text="Digite a senha" translation="[120,620]" minWidth="900" />
             <Button id="loginButton" text="Entrar" translation="[120,760]" minWidth="280" />
             <Label
                 id="statusLabel"

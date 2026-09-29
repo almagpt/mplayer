@@ -31,10 +31,12 @@ sub init()
     m.dns = ""
     m.username = ""
     m.password = ""
+    m.partnerCode = ""
+    m.keyboardTarget = ""
 
-    m.codeInput.observeField("text", "onFormChanged")
-    m.userInput.observeField("text", "onFormChanged")
-    m.passInput.observeField("text", "onFormChanged")
+    m.codeInput.observeField("buttonSelected", "onCodePressed")
+    m.userInput.observeField("buttonSelected", "onUserPressed")
+    m.passInput.observeField("buttonSelected", "onPasswordPressed")
     m.loginButton.observeField("buttonSelected", "onLoginPressed")
     m.logoutButton.observeField("buttonSelected", "onLogoutPressed")
     m.contentList.observeField("itemSelected", "onContentSelected")
@@ -55,11 +57,12 @@ end sub
 
 sub loadSavedLogin()
     section = CreateObject("roRegistrySection", "mplayer")
-    m.codeInput.text = section.Read("partner_code")
-    m.userInput.text = section.Read("username")
-    m.passInput.text = ""
+    m.partnerCode = section.Read("partner_code")
+    m.username = section.Read("username")
+    m.password = ""
     section.Delete("password")
     section.Flush()
+    updateLoginButtons()
 end sub
 
 sub saveLogin(code as string, user as string)
@@ -70,14 +73,66 @@ sub saveLogin(code as string, user as string)
     section.Flush()
 end sub
 
-sub onFormChanged()
-    ' keep observer attached
+sub updateLoginButtons()
+    m.codeInput.text = "Digite o código"
+    if m.partnerCode <> "" then m.codeInput.text = m.partnerCode
+    m.userInput.text = "Digite o usuário"
+    if m.username <> "" then m.userInput.text = m.username
+    m.passInput.text = "Digite a senha"
+    if m.password <> "" then m.passInput.text = "••••••••"
+end sub
+
+sub onCodePressed()
+    openKeyboard("code", "Código do parceiro", m.partnerCode, false)
+end sub
+
+sub onUserPressed()
+    openKeyboard("user", "Usuário Xtream", m.username, false)
+end sub
+
+sub onPasswordPressed()
+    openKeyboard("password", "Senha Xtream", m.password, true)
+end sub
+
+sub openKeyboard(target as string, title as string, value as string, secure as boolean)
+    m.keyboardTarget = target
+    dialog = CreateObject("roSGNode", "StandardKeyboardDialog")
+    dialog.title = title
+    dialog.text = value
+    dialog.buttons = ["Confirmar", "Cancelar"]
+    if secure
+        dialog.keyboardDomain = "password"
+        dialog.textEditBox.secureMode = true
+        dialog.textEditBox.secureLastCharacter = true
+    else
+        dialog.keyboardDomain = "alphanumeric"
+    end if
+    dialog.observeField("buttonSelected", "onKeyboardSelected")
+    m.keyboardDialog = dialog
+    m.top.dialog = dialog
+end sub
+
+sub onKeyboardSelected()
+    dialog = m.keyboardDialog
+    if dialog = invalid then return
+    if dialog.buttonSelected = 0
+        value = Trim(dialog.text)
+        if m.keyboardTarget = "code"
+            m.partnerCode = UCase(value)
+        else if m.keyboardTarget = "user"
+            m.username = value
+        else if m.keyboardTarget = "password"
+            m.password = value
+        end if
+        updateLoginButtons()
+    end if
+    dialog.close = true
 end sub
 
 sub onLoginPressed()
-    code = UCase(Trim(m.codeInput.text))
-    user = Trim(m.userInput.text)
-    password = Trim(m.passInput.text)
+    code = UCase(Trim(m.partnerCode))
+    user = Trim(m.username)
+    password = Trim(m.password)
     if code = "" or user = "" or password = ""
         showStatus("Preencha código, usuário e senha.")
         return
@@ -151,7 +206,7 @@ sub handleXtream(task as object)
         showStatus("Nenhum canal ao vivo encontrado.")
         return
     end if
-    saveLogin(UCase(Trim(m.codeInput.text)), m.username)
+    saveLogin(UCase(Trim(m.partnerCode)), m.username)
     m.section = "live"
     m.allItems = normalizeItems(data, "live")
     m.streams = m.allItems
@@ -495,6 +550,8 @@ sub onLogoutPressed()
     stopPlayback()
     m.homeGroup.visible = false
     m.loginGroup.visible = true
+    m.password = ""
+    updateLoginButtons()
     m.loginButton.setFocus(true)
     showStatus("A DNS vem de mplayer.up.railway.app")
 end sub
